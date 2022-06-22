@@ -1,51 +1,58 @@
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from '@type-challenges/utils';
 
-type cases = [
-  Expect<Equal<DeepReadonly<X>, Expected>>,
-]
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: keyof T[P] extends never ? T[P] : DeepReadonly<T[P]>;
+};
+
+type cases = [Expect<Equal<DeepReadonly<X>, Expected>>];
 
 type X = {
-  a: () => 22
-  b: string
+  a: () => 22;
+  b: string;
   c: {
-    d: boolean
+    d: boolean;
     e: {
       g: {
         h: {
-          i: true
-          j: 'string'
-        }
-        k: 'hello'
-      }
+          i: true;
+          j: 'string';
+        };
+        k: 'hello';
+      };
       l: [
         'hi',
         {
-          m: ['hey']
+          m: ['hey'];
         },
-      ]
-    }
-  }
-}
+      ];
+    };
+  };
+};
 
 type Expected = {
-  readonly a: () => 22
-  readonly b: string
+  readonly a: () => 22;
+  readonly b: string;
   readonly c: {
-    readonly d: boolean
+    readonly d: boolean;
     readonly e: {
       readonly g: {
         readonly h: {
-          readonly i: true
-          readonly j: 'string'
-        }
-        readonly k: 'hello'
-      }
+          readonly i: true;
+          readonly j: 'string';
+        };
+        readonly k: 'hello';
+      };
       readonly l: readonly [
         'hi',
         {
-          readonly m: readonly ['hey']
+          readonly m: readonly ['hey'];
         },
-      ]
-    }
-  }
-}
+      ];
+    };
+  };
+};
+
+/*
+*해설
+객체 T의 키값의 키값을 확인하여, never면 T[P]를 그대로 반환, 아니면 (내부 객체인 경우) 재귀 진행
+*/
