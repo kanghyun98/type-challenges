@@ -1,4 +1,6 @@
-import type { Equal, Expect } from '@type-challenges/utils'
+import type { Equal, Expect } from '@type-challenges/utils';
+
+type MyCapitalize<T extends string> = T extends `${infer S}${infer R}` ? `${Uppercase<S>}${R}` : '';
 
 type cases = [
   Expect<Equal<MyCapitalize<'foobar'>, 'Foobar'>>,
@@ -31,4 +33,10 @@ type cases = [
   Expect<Equal<MyCapitalize<'x'>, 'X'>>,
   Expect<Equal<MyCapitalize<'y'>, 'Y'>>,
   Expect<Equal<MyCapitalize<'z'>, 'Z'>>,
-]
+];
+
+/*
+*해설
+문자열 T의 첫번째 문자를 대문자로 변경하기 위해 T를 `${infer S}${infer R}`로 처리하여 문자열의 첫번째 문자는 S, 나머지는 R로 반영한다.
+빈 문자열이 왔을 때 빈문자열이 반환될 수 있도록 만들었다.
+*/
